@@ -1,0 +1,9 @@
+# AttackRuleMap - Direct dependencies for automation/
+# Install: pip install -r requirements.txt
+
+paramiko>=4.0.0
+PyYAML>=6.0
+python-dotenv>=1.0.0
+pySigma>=0.11.0
+pySigma-backend-splunk>=1.1.0
+splunk-sdk>=2.0.0

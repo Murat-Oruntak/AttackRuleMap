@@ -1,0 +1,44 @@
+{
+    "name": "Detection Lab Coverage (Sigma)",
+    "versions": {
+        "attack": "18",
+        "navigator": "5.3.0",
+        "layer": "4.5"
+    },
+    "domain": "enterprise-attack",
+    "description": "Detection Lab Results - Coverage Map",
+    "filters": {
+        "platforms": [
+            "Windows"
+        ]
+    },
+    "sorting": 3,
+    "layout": {
+        "layout": "side",
+        "aggregateFunction": "average",
+        "showID": false,
+        "showName": true,
+        "showAggregateScores": false,
+        "countUnscored": false
+    },
+    "hideDisabled": false,
+    "techniques": [
+        {
+            "techniqueID": "T1003",
+            "score": 14.285714285714285,
+            "color": "",
+            "comment": "Tests: 7 | Detected: 1 | Coverage: %14.3",
+            "enabled": true,
+            "metadata": []
+        }
+    ],
+    "gradient": {
+        "colors": [
+            "#ff6666",
+            "#ffe766",
+            "#8ec843"
+        ],
+        "minValue": 0,
+        "maxValue": 100
+    }
+}
