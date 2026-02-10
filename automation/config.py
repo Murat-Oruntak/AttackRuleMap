@@ -90,7 +90,7 @@ ATTACK_TIDS_DEFAULT = "T1059.001,T1087.001,T1003.001"
 ATTACK_LIST = [t.strip().upper() for t in os.getenv("ATTACK_TIDS", ATTACK_TIDS_DEFAULT).split(",") if t.strip()]
 
 # --- Output paths ---
-# Main report: root directory (for main repo alignment; deploy copies to dist/ if needed)
-REPORT_JSON_PATH = os.path.join(PROJECT_ROOT, "attack_rule_map.json")
+# Main report: dist/ for AJAX loading by index.html
+REPORT_JSON_PATH = os.path.join(PROJECT_ROOT, "dist", "attack_rule_map.json")
 # dist/ for MITRE layer and HTML (keeps root clean)
 DIST_PATH = os.path.join(PROJECT_ROOT, "dist")

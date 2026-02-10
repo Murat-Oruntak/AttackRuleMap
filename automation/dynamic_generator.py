@@ -18,7 +18,7 @@ from sigma.collection import SigmaCollection
 from sigma.backends.splunk import SplunkBackend
 from sigma.exceptions import SigmaError
 
-VERIFICATION_EARLIEST_SECONDS = 600
+# Time-boxing: Do NOT use relative time (-2m, now). Only absolute epoch timestamps.
 RE_MACRO = re.compile(r"%[^%\s]+%")
 
 # Sigma (pySigma) field names -> Splunk CIM (Common Information Model) field names
@@ -224,7 +224,6 @@ class AttackEngine:
 class VerificationEngine:
     def __init__(self, service):
         self.service = service
-        self.earliest_seconds = VERIFICATION_EARLIEST_SECONDS
 
     def run(
         self,
@@ -235,23 +234,23 @@ class VerificationEngine:
     ) -> tuple[bool, int]:
         """
         Run Splunk verification for the given SPL query.
-        Uses strict time-boxing when earliest_time and latest_time (epoch floats) are provided.
-        Falls back to relative window (last earliest_seconds) when not provided.
+        REQUIRES earliest_time and latest_time (epoch floats) for strict time-boxing.
+        No relative time (-2m, now) - prevents cross-contamination between sequential tests.
         """
         if not spl_query or not spl_query.strip():
+            return False, 0
+        if earliest_time is None or latest_time is None:
+            logging.error(
+                "Verification requires earliest_time and latest_time (epoch). "
+                "Refusing to use relative time to prevent test cross-contamination."
+            )
             return False, 0
         q = spl_query.strip()
         if not q.lower().startswith(("search", "index=", "|", "tstats")):
             q = f"search {q}"
-        if earliest_time is not None and latest_time is not None:
-            # Strict time-boxing: use absolute epoch timestamps
-            earliest = int(earliest_time)
-            latest = int(latest_time)
-        else:
-            # Fallback: relative window (for backward compatibility)
-            now = int(time.time())
-            earliest = now - self.earliest_seconds
-            latest = now
+        # Strict time-boxing: absolute epoch timestamps only
+        earliest = int(earliest_time)
+        latest = int(latest_time)
         full = _cim_search_only(q)
         label = rule_name or "unknown"
         logging.debug("[SPL DEBUG] [%s] Query: %s | Time: %s - %s (epoch)", label, full, earliest, latest)
@@ -424,17 +423,20 @@ class DynamicDetectionLab:
                 )
 
         handler = report_handler.ReportHandler()
-        out_path = handler.save_report_json(report)
-        logging.info("Report written to %s", out_path)
+        handler.save_report_json(report)
         return report
 
 
 def run_dynamic_generator(technique_ids: list[str] | None = None) -> list:
     log_path = os.path.join(config.PROJECT_ROOT, "dynamic_generator.log")
+    fh = logging.FileHandler(log_path, mode="w")
+    fh.setLevel(logging.DEBUG)
+    sh = logging.StreamHandler()
+    sh.setLevel(logging.INFO)
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG,
         format="%(asctime)s - %(levelname)s - %(message)s",
-        handlers=[logging.FileHandler(log_path, mode="w"), logging.StreamHandler()],
+        handlers=[fh, sh],
     )
     lab = DynamicDetectionLab(technique_ids=technique_ids)
     return lab.run()

@@ -24,10 +24,10 @@
     "hideDisabled": false,
     "techniques": [
         {
-            "techniqueID": "T1003",
-            "score": 14.285714285714285,
+            "techniqueID": "T1033",
+            "score": 100.0,
             "color": "",
-            "comment": "Tests: 7 | Detected: 1 | Coverage: %14.3",
+            "comment": "Tests: 6 | Detected: 6 | Coverage: %100.0",
             "enabled": true,
             "metadata": []
         }

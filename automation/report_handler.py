@@ -8,7 +8,7 @@ from automation import config
 
 
 class ReportHandler:
-    """Handles report generation, MITRE Navigator layer, and coverage statistics."""
+    """Handles report generation, ATT&CK Navigator layer, and coverage statistics."""
 
     def generate_mitre_layer(self, data: list) -> str:
         """
@@ -87,15 +87,79 @@ class ReportHandler:
         logging.info("Total %s techniques mapped to layer.", len(layer["techniques"]))
         return output_file
 
+    def _log_rule_details(self, entry: dict, rule_list: list, rule_type: str) -> None:
+        """Log full rule details (event_count, SPL) before filtering. DEBUG level = file only, not terminal."""
+        tid = entry.get("tech_id", "")
+        test_num = entry.get("test_number", "")
+        atomic_name = entry.get("atomic_attack_name", "")
+        for r in rule_list:
+            name = r.get("rule_name", "")
+            detected = r.get("detected", False)
+            event_count = r.get("log_count", r.get("event_count", 0))
+            spl = r.get("generated_spl") or r.get("original_spl") or r.get("sanitized_spl") or ""
+            logging.debug(
+                "[RULE_DETAIL] tech_id=%s test=%s atomic=%s type=%s rule=%s detected=%s event_count=%s spl=%s",
+                tid, test_num, atomic_name, rule_type, name, detected, event_count,
+                spl[:200] + "..." if len(spl) > 200 else spl,
+            )
+
+    def _build_ultra_lite(self, merged: list) -> list:
+        """
+        Build Ultra-Lite JSON: filter detected-only rules, strip to rule_name+rule_link.
+        Does NOT modify the original merged list.
+        """
+        lite = []
+        for entry in merged:
+            e = dict(entry)
+            # Filter sigma_rules: keep only detected=True (or legacy entries without detected field)
+            sigma = e.get("sigma_rules", [])
+            sigma_lite = [
+                {"rule_name": r.get("rule_name", ""), "rule_link": r.get("rule_link", "")}
+                for r in sigma
+                if r.get("detected", True)  # Legacy: no 'detected' -> include
+            ]
+            e["sigma_rules"] = sigma_lite
+
+            # escu_rules and splunk_rules: normalize to splunk_rules for dashboard
+            escu = e.get("escu_rules", e.get("splunk_rules", []))
+            escu_lite = [
+                {"rule_name": r.get("rule_name", ""), "rule_link": r.get("rule_link", "")}
+                for r in escu
+                if r.get("detected", True)  # Legacy: no 'detected' -> include
+            ]
+            e["splunk_rules"] = escu_lite
+            if "escu_rules" in e:
+                del e["escu_rules"]
+            lite.append(e)
+        return lite
+
+    def _merge_rule_lists(self, existing_rules: list, new_rules: list) -> list:
+        """
+        Merge two rule lists by rule_name. No duplicate rule names.
+        Order: existing first, then new rules whose rule_name is not already present.
+        """
+        seen_names = {r.get("rule_name") for r in existing_rules if r.get("rule_name")}
+        out = list(existing_rules)
+        for r in new_rules:
+            name = r.get("rule_name")
+            if name and name not in seen_names:
+                seen_names.add(name)
+                out.append(r)
+        return out
+
     def save_report_json(self, new_results: list) -> str:
         """
-        Smart Merge: Save report to root, preserving existing data from other contributors
-        (e.g., Linux/macOS tests) that were not run in this session.
-        - If attack_rule_map.json exists: merge (keep untouched, overwrite session, append new)
-        - If not: save new data as usual.
+        Deep Merge by attack GUID: Save report preserving existing data and extending
+        rule lists when the same atomic test (same GUID) exists in both existing and new.
+        - If attack_rule_map.json exists: merge by atomic_attack_guid.
+        - If GUID exists: do NOT overwrite; merge sigma_rules and splunk_rules (no duplicate rule names).
+        - If GUID does not exist: append new entry as is.
         - Normalizes technique_id -> tech_id so output schema matches attack_rule_map.json.
+        - Produces Ultra-Lite JSON: detected-only rules, rule_name+rule_link, minified.
+        - Full details (event_count, SPL) are logged before filtering.
         """
         path = config.REPORT_JSON_PATH
+        os.makedirs(os.path.dirname(path), exist_ok=True)
 
         def _normalize_entry(e: dict) -> dict:
             """Map technique_id -> tech_id for schema consistency; remove technique_id."""
@@ -107,17 +171,28 @@ class ReportHandler:
                 del entry["technique_id"]
             return entry
 
-        def _key(e: dict) -> tuple:
-            tid = e.get("tech_id") or e.get("technique_id") or ""
-            return (
-                (str(tid) if tid else "").upper(),
-                e.get("test_number"),
-                str(e.get("platform", "")).strip().lower(),
-            )
-
         normalized = [_normalize_entry(e) for e in new_results]
-        new_map = {_key(e): e for e in normalized}
-        session_keys = set(new_map.keys())
+        new_by_guid: dict = {}
+        for e in normalized:
+            guid = (e.get("atomic_attack_guid") or "").strip()
+            if not guid:
+                continue
+            if guid not in new_by_guid:
+                new_by_guid[guid] = dict(e)
+                new_by_guid[guid]["sigma_rules"] = list(e.get("sigma_rules", []))
+                new_by_guid[guid]["splunk_rules"] = list(
+                    e.get("escu_rules") or e.get("splunk_rules", [])
+                )
+                if "escu_rules" in new_by_guid[guid]:
+                    del new_by_guid[guid]["escu_rules"]
+            else:
+                new_by_guid[guid]["sigma_rules"] = self._merge_rule_lists(
+                    new_by_guid[guid]["sigma_rules"], e.get("sigma_rules", [])
+                )
+                new_by_guid[guid]["splunk_rules"] = self._merge_rule_lists(
+                    new_by_guid[guid]["splunk_rules"],
+                    e.get("escu_rules") or e.get("splunk_rules", []),
+                )
 
         existing: list = []
         if os.path.isfile(path):
@@ -131,18 +206,48 @@ class ReportHandler:
 
         merged: list = []
         for e in existing:
-            k = _key(e)
-            if k in session_keys:
-                merged.append(new_map[k])
-                del new_map[k]
+            guid = (e.get("atomic_attack_guid") or "").strip()
+            if guid and guid in new_by_guid:
+                new_entry = new_by_guid.pop(guid)
+                merged_entry = dict(e)
+                merged_entry["sigma_rules"] = self._merge_rule_lists(
+                    e.get("sigma_rules", []), new_entry.get("sigma_rules", [])
+                )
+                merged_entry["splunk_rules"] = self._merge_rule_lists(
+                    e.get("splunk_rules", []), new_entry.get("splunk_rules", [])
+                )
+                if "escu_rules" in merged_entry:
+                    del merged_entry["escu_rules"]
+                merged.append(merged_entry)
             else:
                 merged.append(e)
-        for e in new_map.values():
+
+        for e in new_by_guid.values():
             merged.append(e)
 
+        # Log full details BEFORE filtering (log file is source of truth)
+        for entry in merged:
+            for rule_type, key in [("sigma", "sigma_rules"), ("escu", "escu_rules"), ("splunk", "splunk_rules")]:
+                rules = entry.get(key, [])
+                if rules:
+                    self._log_rule_details(entry, rules, rule_type)
+
+        # Build Ultra-Lite version (filter detected, strip to rule_name+rule_link)
+        lite = self._build_ultra_lite(merged)
+
+        # Save minified Ultra-Lite JSON
         with open(path, "w", encoding="utf-8") as f:
-            json.dump(merged, f, indent=4, ensure_ascii=False)
-        logging.info("Report saved (smart merge): %s", path)
+            json.dump(lite, f, separators=(",", ":"), ensure_ascii=False)
+        logging.info("Report saved (smart merge, ultra-lite): %s", path)
+
+        # Write metadata.json in same directory (dist/) for dashboard "Last Updated"
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        metadata = {"last_updated": timestamp}
+        metadata_path = os.path.join(os.path.dirname(path), "metadata.json")
+        with open(metadata_path, "w", encoding="utf-8") as f:
+            json.dump(metadata, f, indent=2)
+        logging.info("Metadata saved: %s", metadata_path)
+
         return path
 
     def print_coverage_stats(self, data: list) -> None:

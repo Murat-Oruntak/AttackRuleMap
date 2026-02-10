@@ -2,6 +2,7 @@ import os
 import sys
 import argparse
 import logging
+from datetime import datetime
 
 _project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _project_root not in sys.path:
@@ -27,16 +28,17 @@ def banner():
 
 
 def setup_logging(verbose: bool = False):
-    log_path = os.path.join(config.PROJECT_ROOT, "automation_run.log")
-    level = logging.DEBUG if verbose else logging.INFO
+    run_ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_path = os.path.join(config.PROJECT_ROOT, f"automation_run_{run_ts}.log")
+    fh = logging.FileHandler(log_path, mode="w")
+    fh.setLevel(logging.DEBUG)
+    sh = logging.StreamHandler()
+    sh.setLevel(logging.DEBUG if verbose else logging.INFO)
     logging.basicConfig(
-        level=level,
+        level=logging.DEBUG,
         format="%(asctime)s - %(levelname)s - %(message)s",
         datefmt="%H:%M:%S",
-        handlers=[
-            logging.FileHandler(log_path, mode="w"),
-            logging.StreamHandler(),
-        ],
+        handlers=[fh, sh],
     )
     for _logger in ("splunklib", "urllib3", "paramiko"):
         logging.getLogger(_logger).setLevel(logging.WARNING)
@@ -94,6 +96,9 @@ Examples:
         technique_ids = [t.strip().upper() for t in args.tids if t]
         logging.info("%s[*] Mode: --tid %s%s", GREEN, ", ".join(technique_ids), RESET)
 
+    # Time-boxing: DynamicDetectionLab captures test_start_time before each atomic test,
+    # test_end_time after the 30s indexing buffer, and passes them to Splunk verification
+    # to prevent cross-contamination between sequential tests (no relative -2m/now).
     lab = dynamic_generator.DynamicDetectionLab(technique_ids=technique_ids)
     report = lab.run()
 
