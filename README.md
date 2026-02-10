@@ -38,3 +38,7 @@ This project is open to contributions from the community. Here are some ways you
 - **Feedback and Suggestions:** Share your ideas for improving the project or addressing potential gaps.
 
 If you'd like to contribute, feel free to submit a pull request or open an issue. 💡
+
+## Contributors
+
+- [@Niicolaa](https://github.com/Niicolaa)
