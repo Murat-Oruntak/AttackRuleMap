@@ -161,7 +161,7 @@
                 width="25"
                 height="25"
                 viewBox="0 0 16 16"
-                fill="black"
+                fill="currentColor"
                 class="bi bi-brightness-high"
                 style="display: none"
               >
@@ -175,7 +175,7 @@
                 width="25"
                 height="25"
                 viewBox="0 0 16 16"
-                fill="white"
+                fill="currentColor"
                 class="bi bi-moon"
               >
                 <path
@@ -425,13 +425,7 @@
             },
           ],
           initComplete: function () {
-            var $mitreBtn = $(
-              '<button class="btn btn-danger btn-sm text-white ms-2 ml-2" type="button" style="font-weight: 500;">' +
-                '<i class="fas fa-map-marked-alt me-1 mr-1"></i> ATT&CK&reg; Navigator' +
-                "</button>"
-            );
-            $(".dt-buttons").after($mitreBtn);
-            $mitreBtn.on("click", function () {
+            var openLayer = function (filename) {
               var hostname = window.location.hostname;
               if (hostname === "localhost" || hostname === "127.0.0.1") {
                 alert(
@@ -443,11 +437,28 @@
                 0,
                 window.location.href.lastIndexOf("/") + 1
               );
-              var jsonUrl = currentBase + "mitre_layer.json";
+              var jsonUrl = currentBase + filename;
               var targetUrl =
                 "https://mitre-attack.github.io/attack-navigator/#layerURL=" +
                 encodeURIComponent(jsonUrl);
               window.open(targetUrl, "_blank");
+            };
+            var $mitreGroup = $(
+              '<div class="btn-group ms-2 ml-2" role="group">' +
+                '<button type="button" class="btn btn-danger btn-sm text-white dropdown-toggle" data-bs-toggle="dropdown" style="font-weight: 500;">' +
+                '<i class="fas fa-map-marked-alt me-1 mr-1"></i> ATT&CK&reg; Navigator <span class="caret"></span>' +
+                '</button>' +
+                '<ul class="dropdown-menu">' +
+                '<li><a class="dropdown-item" href="#" data-layer="mitre_layer_combined.json"><i class="fas fa-layer-group me-1"></i> Combined</a></li>' +
+                '<li><a class="dropdown-item" href="#" data-layer="mitre_layer_sigma.json"><i class="fas fa-shield-alt me-1"></i> Sigma</a></li>' +
+                '<li><a class="dropdown-item" href="#" data-layer="mitre_layer_splunk.json"><i class="fas fa-chart-line me-1"></i> Splunk</a></li>' +
+                '</ul></div>'
+            );
+            $(".dt-buttons").after($mitreGroup);
+            $mitreGroup.find(".dropdown-item").on("click", function (e) {
+              e.preventDefault();
+              var filename = $(this).data("layer");
+              openLayer(filename);
             });
           },
         });
@@ -461,14 +472,14 @@
         }
 
         $("#dark-mode-icon").click(function () {
-          $("html").attr("data-bs-theme", "light");
-          localStorage.setItem("theme", "light");
+          $("html").attr("data-bs-theme", "dark");
+          localStorage.setItem("theme", "dark");
           toggleIcons();
         });
 
         $("#light-mode-icon").click(function () {
-          $("html").attr("data-bs-theme", "dark");
-          localStorage.setItem("theme", "dark");
+          $("html").attr("data-bs-theme", "light");
+          localStorage.setItem("theme", "light");
           toggleIcons();
         });
 
@@ -477,13 +488,13 @@
             .removeClass("btn-secondary")
             .addClass("btn-success");
           if ($("html").attr("data-bs-theme") === "dark") {
-            $("#light-mode-icon").hide();
-            $("#dark-mode-icon").show();
+            $("#dark-mode-icon").hide();
+            $("#light-mode-icon").show().css("color", "#adb5bd");
             $("#github-icon").attr("style", "filter: invert(0)");
           } else {
             $("#github-icon").attr("style", "filter: invert(1)");
-            $("#light-mode-icon").show();
-            $("#dark-mode-icon").hide();
+            $("#light-mode-icon").hide();
+            $("#dark-mode-icon").show().css("color", "#212529");
           }
         }
 

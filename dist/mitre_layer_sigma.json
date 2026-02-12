@@ -1,0 +1,2204 @@
+{
+    "name": "Detection Lab Coverage (Sigma)",
+    "versions": {
+        "attack": "18",
+        "navigator": "5.3.0",
+        "layer": "4.5"
+    },
+    "domain": "enterprise-attack",
+    "description": "Sigma rule coverage",
+    "filters": {
+        "platforms": [
+            "Windows"
+        ]
+    },
+    "sorting": 3,
+    "layout": {
+        "layout": "side",
+        "aggregateFunction": "average",
+        "showID": false,
+        "showName": true,
+        "showAggregateScores": false,
+        "countUnscored": false
+    },
+    "hideDisabled": false,
+    "techniques": [
+        {
+            "techniqueID": "T1001.002",
+            "score": 33.33333333333333,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 1 | Coverage: %33.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1003",
+            "score": 57.14285714285714,
+            "color": "",
+            "comment": "Tests: 7 | Detected: 4 | Coverage: %57.1",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1003.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 14 | Detected: 14 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1003.002",
+            "score": 62.5,
+            "color": "",
+            "comment": "Tests: 8 | Detected: 5 | Coverage: %62.5",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1003.003",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 9 | Detected: 9 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1003.004",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1003.005",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1003.006",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1003.007",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 4 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1003.008",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1005",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 2 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1006",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1007",
+            "score": 40.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 2 | Coverage: %40.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1010",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1012",
+            "score": 16.666666666666664,
+            "color": "",
+            "comment": "Tests: 6 | Detected: 1 | Coverage: %16.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1014",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1016",
+            "score": 88.88888888888889,
+            "color": "",
+            "comment": "Tests: 9 | Detected: 8 | Coverage: %88.9",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1016.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1016.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1018",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 20 | Detected: 20 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1020",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1021.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 4 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1021.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 4 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1021.003",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1021.004",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 1 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1021.005",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1021.006",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 2 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1025",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1027",
+            "score": 54.54545454545454,
+            "color": "",
+            "comment": "Tests: 11 | Detected: 6 | Coverage: %54.5",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1027.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 3 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1027.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1027.004",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 1 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1027.006",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1027.007",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1027.013",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1030",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 2 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1033",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 7 | Detected: 7 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1036",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1036.003",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 8 | Detected: 8 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1036.004",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 4 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1036.005",
+            "score": 33.33333333333333,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 1 | Coverage: %33.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1036.006",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1036.007",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1037.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1037.004",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1037.005",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1039",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1040",
+            "score": 85.71428571428571,
+            "color": "",
+            "comment": "Tests: 14 | Detected: 12 | Coverage: %85.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1041",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1046",
+            "score": 55.55555555555556,
+            "color": "",
+            "comment": "Tests: 9 | Detected: 5 | Coverage: %55.6",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1047",
+            "score": 80.0,
+            "color": "",
+            "comment": "Tests: 10 | Detected: 8 | Coverage: %80.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1048",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1048.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1048.003",
+            "score": 20.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 1 | Coverage: %20.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1049",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 4 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1053.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1053.005",
+            "score": 75.0,
+            "color": "",
+            "comment": "Tests: 12 | Detected: 9 | Coverage: %75.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1055",
+            "score": 23.076923076923077,
+            "color": "",
+            "comment": "Tests: 13 | Detected: 3 | Coverage: %23.1",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1055.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1055.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1055.003",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1055.004",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1055.011",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1055.012",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1055.015",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1056.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1056.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1056.004",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1057",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 8 | Detected: 4 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1059",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1059.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 22 | Detected: 22 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1059.003",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 6 | Detected: 4 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1059.005",
+            "score": 33.33333333333333,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 1 | Coverage: %33.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1059.007",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1059.010",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1069.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 5 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1069.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 14 | Detected: 14 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1070",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1070.001",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 2 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1070.003",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 4 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1070.004",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 7 | Detected: 7 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1070.005",
+            "score": 80.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 4 | Coverage: %80.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1070.006",
+            "score": 60.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 3 | Coverage: %60.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1070.008",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1071",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1071.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1071.004",
+            "score": 25.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 1 | Coverage: %25.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1072",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1074.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1078.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1078.003",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 2 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1082",
+            "score": 60.71428571428571,
+            "color": "",
+            "comment": "Tests: 28 | Detected: 17 | Coverage: %60.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1083",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 6 | Detected: 6 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1087.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 4 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1087.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 22 | Detected: 22 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1090.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1090.003",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1091",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1095",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 2 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1098",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 10 | Detected: 10 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1105",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 29 | Detected: 29 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1106",
+            "score": 60.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 3 | Coverage: %60.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1110.001",
+            "score": 75.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 3 | Coverage: %75.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1110.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1110.003",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 6 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1110.004",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1112",
+            "score": 30.0,
+            "color": "",
+            "comment": "Tests: 90 | Detected: 27 | Coverage: %30.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1113",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 2 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1114.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1115",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 3 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1119",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 4 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1120",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 2 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1123",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1124",
+            "score": 40.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 2 | Coverage: %40.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1125",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1127",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1127.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1129",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1132.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1133",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1134.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1134.002",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 1 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1134.004",
+            "score": 40.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 2 | Coverage: %40.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1134.005",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1135",
+            "score": 44.44444444444444,
+            "color": "",
+            "comment": "Tests: 9 | Detected: 4 | Coverage: %44.4",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1136.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 4 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1136.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 3 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1137",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1137.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1137.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1137.004",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1137.006",
+            "score": 20.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 1 | Coverage: %20.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1140",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 2 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1176",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1187",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 3 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1195",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1197",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 4 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1201",
+            "score": 80.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 4 | Coverage: %80.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1202",
+            "score": 60.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 3 | Coverage: %60.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1204.002",
+            "score": 23.076923076923077,
+            "color": "",
+            "comment": "Tests: 13 | Detected: 3 | Coverage: %23.1",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1204.003",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1207",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1216",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1216.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1217",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 6 | Detected: 4 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 16 | Detected: 16 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218.001",
+            "score": 37.5,
+            "color": "",
+            "comment": "Tests: 8 | Detected: 3 | Coverage: %37.5",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218.003",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218.004",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 8 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218.005",
+            "score": 30.0,
+            "color": "",
+            "comment": "Tests: 10 | Detected: 3 | Coverage: %30.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218.007",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 11 | Detected: 11 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218.008",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218.009",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218.010",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 5 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1218.011",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 16 | Detected: 16 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1219",
+            "score": 13.333333333333334,
+            "color": "",
+            "comment": "Tests: 15 | Detected: 2 | Coverage: %13.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1220",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 2 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1221",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1222",
+            "score": 33.33333333333333,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 1 | Coverage: %33.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1222.001",
+            "score": 83.33333333333334,
+            "color": "",
+            "comment": "Tests: 6 | Detected: 5 | Coverage: %83.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1482",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 8 | Detected: 8 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1484.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1485",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 2 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1486",
+            "score": 25.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 1 | Coverage: %25.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1489",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 3 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1490",
+            "score": 75.0,
+            "color": "",
+            "comment": "Tests: 12 | Detected: 9 | Coverage: %75.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1491.001",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 2 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1496",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1497.001",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 1 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1505.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1505.003",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1505.004",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 1 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1505.005",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1518",
+            "score": 20.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 1 | Coverage: %20.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1518.001",
+            "score": 37.5,
+            "color": "",
+            "comment": "Tests: 8 | Detected: 3 | Coverage: %37.5",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1529",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 6 | Detected: 3 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1531",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 2 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1539",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1542.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1543.003",
+            "score": 83.33333333333334,
+            "color": "",
+            "comment": "Tests: 6 | Detected: 5 | Coverage: %83.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546",
+            "score": 11.11111111111111,
+            "color": "",
+            "comment": "Tests: 9 | Detected: 1 | Coverage: %11.1",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.001",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.003",
+            "score": 33.33333333333333,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 1 | Coverage: %33.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.007",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.008",
+            "score": 20.0,
+            "color": "",
+            "comment": "Tests: 10 | Detected: 2 | Coverage: %20.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.009",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.010",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.011",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 2 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.012",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.013",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.015",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1546.018",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547",
+            "score": 66.66666666666666,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 2 | Coverage: %66.7",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.001",
+            "score": 15.0,
+            "color": "",
+            "comment": "Tests: 20 | Detected: 3 | Coverage: %15.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.003",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.004",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.005",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.006",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.008",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.009",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 1 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.010",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.012",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.014",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1547.015",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1548.002",
+            "score": 11.11111111111111,
+            "color": "",
+            "comment": "Tests: 27 | Detected: 3 | Coverage: %11.1",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1550.002",
+            "score": 33.33333333333333,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 1 | Coverage: %33.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1550.003",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 1 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1552",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1552.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 10 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1552.002",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1552.004",
+            "score": 42.857142857142854,
+            "color": "",
+            "comment": "Tests: 7 | Detected: 3 | Coverage: %42.9",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1552.006",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1553.003",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1553.004",
+            "score": 33.33333333333333,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 1 | Coverage: %33.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1553.005",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1553.006",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1555",
+            "score": 50.0,
+            "color": "",
+            "comment": "Tests: 8 | Detected: 4 | Coverage: %50.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1555.003",
+            "score": 57.14285714285714,
+            "color": "",
+            "comment": "Tests: 14 | Detected: 8 | Coverage: %57.1",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1555.004",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 2 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1556.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1557.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1558.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1558.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1558.003",
+            "score": 14.285714285714285,
+            "color": "",
+            "comment": "Tests: 7 | Detected: 1 | Coverage: %14.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1558.004",
+            "score": 33.33333333333333,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 1 | Coverage: %33.3",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1559",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1559.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1560",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1560.001",
+            "score": 28.57142857142857,
+            "color": "",
+            "comment": "Tests: 7 | Detected: 2 | Coverage: %28.6",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1562",
+            "score": 100.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 1 | Coverage: %100.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1562.001",
+            "score": 20.51282051282051,
+            "color": "",
+            "comment": "Tests: 39 | Detected: 8 | Coverage: %20.5",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1562.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 10 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1562.003",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1562.004",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 12 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1562.006",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 10 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1562.009",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1562.010",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1563.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1564",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1564.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1564.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1564.003",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1564.004",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1564.006",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1566.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1566.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1567.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1567.003",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1569.002",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 7 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1570",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1571",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1572",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 4 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1573",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1574.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 6 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1574.008",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1574.009",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1574.011",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1574.012",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 3 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1592.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1595.003",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1614",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1614.001",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 6 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1615",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 5 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1620",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1622",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1649",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1652",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 1 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        },
+        {
+            "techniqueID": "T1654",
+            "score": 0.0,
+            "color": "",
+            "comment": "Tests: 2 | Detected: 0 | Coverage: %0.0",
+            "enabled": true,
+            "metadata": []
+        }
+    ],
+    "gradient": {
+        "colors": [
+            "#ff6666",
+            "#ffe766",
+            "#8ec843"
+        ],
+        "minValue": 0,
+        "maxValue": 100
+    }
+}

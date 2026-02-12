@@ -10,82 +10,128 @@ from automation import config
 class ReportHandler:
     """Handles report generation, ATT&CK Navigator layer, and coverage statistics."""
 
-    def generate_mitre_layer(self, data: list) -> str:
+    def generate_mitre_layers(self) -> list[str]:
         """
-        Generate MITRE ATT&CK Navigator layer from report data.
-        Args:
-            data: List of report entries (tech_id, sigma_rules, escu_rules, etc.)
+        Generate 3 MITRE ATT&CK Navigator layers from attack_rule_map.json:
+        - mitre_layer_sigma.json: Sigma rule coverage
+        - mitre_layer_splunk.json: Splunk/ESCU rule coverage
+        - mitre_layer_combined.json: Sigma OR Splunk detected
+
+        Uses the merged report on disk (attack_rule_map.json). In ultra-lite format,
+        presence of rules in sigma_rules/splunk_rules means they were detected.
         Returns:
-            Path to the generated mitre_layer.json file.
+            List of paths to the generated layer files.
         """
-        output_file = os.path.join(config.DIST_PATH, "mitre_layer.json")
-        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        path = config.REPORT_JSON_PATH
+        if not os.path.isfile(path):
+            logging.warning("No attack_rule_map.json found. Skipping MITRE layer generation.")
+            return []
 
-        layer = {
-            "name": "Detection Lab Coverage (Sigma)",
-            "versions": {
-                "attack": "18",
-                "navigator": "5.3.0",
-                "layer": "4.5"
-            },
-            "domain": "enterprise-attack",
-            "description": "Detection Lab Results - Coverage Map",
-            "filters": {
-                "platforms": ["Windows"]
-            },
-            "sorting": 3,
-            "layout": {
-                "layout": "side",
-                "aggregateFunction": "average",
-                "showID": False,
-                "showName": True,
-                "showAggregateScores": False,
-                "countUnscored": False
-            },
-            "hideDisabled": False,
-            "techniques": []
-        }
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            logging.warning("Could not load attack_rule_map.json: %s", e)
+            return []
 
-        technique_stats = {}
-        for test in data:
-            tid = test.get("tech_id", "")
+        data = data if isinstance(data, list) else []
+        if not data:
+            logging.warning("attack_rule_map.json is empty. Skipping MITRE layer generation.")
+            return []
+
+        os.makedirs(config.DIST_PATH, exist_ok=True)
+
+        # Aggregate stats per technique: total, sigma_detected, splunk_detected
+        technique_stats: dict[str, dict[str, int]] = {}
+        for entry in data:
+            tid = (entry.get("tech_id") or entry.get("technique_id") or "").strip().upper()
             if not tid:
                 continue
             if tid not in technique_stats:
-                technique_stats[tid] = {"total": 0, "detected": 0}
+                technique_stats[tid] = {"total": 0, "sigma": 0, "splunk": 0}
             technique_stats[tid]["total"] += 1
 
-            sigma_rules = test.get("sigma_rules", [])
-            is_detected = any(r.get("detected") for r in sigma_rules)
-            if is_detected:
-                technique_stats[tid]["detected"] += 1
+            sigma_rules = entry.get("sigma_rules", [])
+            splunk_rules = entry.get("escu_rules", entry.get("splunk_rules", []))
+            # Ultra-lite: rules in list = detected (no "detected" field)
+            has_sigma = bool(sigma_rules)
+            has_splunk = bool(splunk_rules)
+            if has_sigma:
+                technique_stats[tid]["sigma"] += 1
+            if has_splunk:
+                technique_stats[tid]["splunk"] += 1
 
-        for tid, stats in technique_stats.items():
-            total = stats["total"]
-            detected = stats["detected"]
-            score = (detected / total * 100) if total > 0 else 0
-            technique_data = {
-                "techniqueID": tid,
-                "score": score,
-                "color": "",
-                "comment": f"Tests: {total} | Detected: {detected} | Coverage: %{score:.1f}",
-                "enabled": True,
-                "metadata": []
+        def build_layer(name: str, description: str, detected_key: str) -> dict:
+            techniques = []
+            for tid, stats in sorted(technique_stats.items()):
+                total = stats["total"]
+                detected = stats[detected_key]
+                score = (detected / total * 100) if total > 0 else 0
+                techniques.append({
+                    "techniqueID": tid,
+                    "score": score,
+                    "color": "",
+                    "comment": f"Tests: {total} | Detected: {detected} | Coverage: %{score:.1f}",
+                    "enabled": True,
+                    "metadata": []
+                })
+            return {
+                "name": name,
+                "versions": {"attack": "18", "navigator": "5.3.0", "layer": "4.5"},
+                "domain": "enterprise-attack",
+                "description": description,
+                "filters": {"platforms": ["Windows"]},
+                "sorting": 3,
+                "layout": {
+                    "layout": "side",
+                    "aggregateFunction": "average",
+                    "showID": False,
+                    "showName": True,
+                    "showAggregateScores": False,
+                    "countUnscored": False
+                },
+                "hideDisabled": False,
+                "techniques": techniques,
+                "gradient": {"colors": ["#ff6666", "#ffe766", "#8ec843"], "minValue": 0, "maxValue": 100}
             }
-            layer["techniques"].append(technique_data)
 
-        layer["gradient"] = {
-            "colors": ["#ff6666", "#ffe766", "#8ec843"],
-            "minValue": 0,
-            "maxValue": 100
-        }
+        # Combined: sigma OR splunk counts as detected
+        for tid in technique_stats:
+            technique_stats[tid]["combined"] = 0
+        for entry in data:
+            tid = (entry.get("tech_id") or entry.get("technique_id") or "").strip().upper()
+            if not tid or tid not in technique_stats:
+                continue
+            has_sigma = bool(entry.get("sigma_rules", []))
+            has_splunk = bool(entry.get("escu_rules", entry.get("splunk_rules", [])))
+            if has_sigma or has_splunk:
+                technique_stats[tid]["combined"] += 1
 
-        with open(output_file, "w", encoding="utf-8") as f:
-            json.dump(layer, f, indent=4)
+        # Remove legacy single layer file if present
+        legacy_path = os.path.join(config.DIST_PATH, "mitre_layer.json")
+        if os.path.isfile(legacy_path):
+            try:
+                os.remove(legacy_path)
+                logging.info("Removed legacy mitre_layer.json")
+            except OSError as e:
+                logging.warning("Could not remove legacy mitre_layer.json: %s", e)
 
-        logging.info("MITRE Layer file created: %s", output_file)
-        logging.info("Total %s techniques mapped to layer.", len(layer["techniques"]))
-        return output_file
+        layers_config = [
+            ("mitre_layer_sigma.json", "Detection Lab Coverage (Sigma)", "Sigma rule coverage", "sigma"),
+            ("mitre_layer_splunk.json", "Detection Lab Coverage (Splunk)", "Splunk/ESCU rule coverage", "splunk"),
+            ("mitre_layer_combined.json", "Detection Lab Coverage (Combined)", "Sigma OR Splunk coverage", "combined"),
+        ]
+
+        output_paths = []
+        for filename, layer_name, description, key in layers_config:
+            layer = build_layer(layer_name, description, key)
+            output_file = os.path.join(config.DIST_PATH, filename)
+            with open(output_file, "w", encoding="utf-8") as f:
+                json.dump(layer, f, indent=4)
+            logging.info("MITRE Layer created: %s (%s techniques)", output_file, len(layer["techniques"]))
+            output_paths.append(output_file)
+
+        return output_paths
 
     def _log_rule_details(self, entry: dict, rule_list: list, rule_type: str) -> None:
         """Log full rule details (event_count, SPL) before filtering. DEBUG level = file only, not terminal."""

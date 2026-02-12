@@ -54,6 +54,7 @@ Examples:
   python -m automation.main --tid T1059.001
   python -m automation.main --tid T1059.001 --tid T1087.001
   python -m automation.main -v --tid T1059.001
+  python -m automation.main --mitre-only    # Only regenerate MITRE layers from attack_rule_map.json
         """,
     )
     group = parser.add_mutually_exclusive_group(required=True)
@@ -69,6 +70,11 @@ Examples:
         metavar="TID",
         help="Run only the given technique ID (e.g. T1059.001). Can be repeated.",
     )
+    group.add_argument(
+        "--mitre-only",
+        action="store_true",
+        help="Only regenerate MITRE layer files from attack_rule_map.json (no lab run).",
+    )
     parser.add_argument(
         "-v",
         "--verbose",
@@ -79,6 +85,19 @@ Examples:
 
     setup_logging(verbose=args.verbose)
     banner()
+
+    if args.mitre_only:
+        logging.info("%s[*] Mode: --mitre-only (regenerating layers from attack_rule_map.json)%s", GREEN, RESET)
+        handler = report_handler.ReportHandler()
+        paths = handler.generate_mitre_layers()
+        print()
+        logging.info("%s[*] MITRE layer generation finished.%s", CYAN + BOLD, RESET)
+        for p in paths:
+            logging.info("%s    %s%s", GREEN, p, RESET)
+        if not paths:
+            logging.warning("No layers created. Ensure dist/attack_rule_map.json exists.")
+        print()
+        return
 
     if args.all:
         from automation import repo_manager
@@ -102,10 +121,10 @@ Examples:
     lab = dynamic_generator.DynamicDetectionLab(technique_ids=technique_ids)
     report = lab.run()
 
+    handler = report_handler.ReportHandler()
     if report:
-        handler = report_handler.ReportHandler()
-        handler.generate_mitre_layer(report)
         handler.print_coverage_stats(report)
+    handler.generate_mitre_layers()
 
     print()
     logging.info("%s[*] Detection Lab Pipeline finished.%s", CYAN + BOLD, RESET)
