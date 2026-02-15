@@ -1,0 +1,4 @@
+/*
+  Access-Control-Allow-Origin: https://mitre-attack.github.io
+  Access-Control-Allow-Methods: GET, OPTIONS
+  Access-Control-Allow-Headers: *

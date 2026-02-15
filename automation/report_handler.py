@@ -10,6 +10,20 @@ from automation import config
 class ReportHandler:
     """Handles report generation, ATT&CK Navigator layer, and coverage statistics."""
 
+    def generate_cors_headers(self) -> None:
+        """Write a _headers file in config.DIST_PATH to allow cross-origin requests from MITRE Navigator."""
+        os.makedirs(config.DIST_PATH, exist_ok=True)
+        headers_path = os.path.join(config.DIST_PATH, "_headers")
+        content = (
+            "/*\n"
+            "  Access-Control-Allow-Origin: https://mitre-attack.github.io\n"
+            "  Access-Control-Allow-Methods: GET, OPTIONS\n"
+            "  Access-Control-Allow-Headers: *\n"
+        )
+        with open(headers_path, "w", encoding="utf-8") as f:
+            f.write(content)
+        logging.info("CORS headers file created: %s", headers_path)
+
     def generate_mitre_layers(self) -> list[str]:
         """
         Generate 3 MITRE ATT&CK Navigator layers from attack_rule_map.json:
@@ -131,6 +145,7 @@ class ReportHandler:
             logging.info("MITRE Layer created: %s (%s techniques)", output_file, len(layer["techniques"]))
             output_paths.append(output_file)
 
+        self.generate_cors_headers()
         return output_paths
 
     def _log_rule_details(self, entry: dict, rule_list: list, rule_type: str) -> None:
