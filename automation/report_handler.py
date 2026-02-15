@@ -131,9 +131,9 @@ class ReportHandler:
                 logging.warning("Could not remove legacy mitre_layer.json: %s", e)
 
         layers_config = [
-            ("mitre_layer_sigma.json", "Detection Lab Coverage (Sigma)", "Sigma rule coverage", "sigma"),
-            ("mitre_layer_splunk.json", "Detection Lab Coverage (Splunk)", "Splunk/ESCU rule coverage", "splunk"),
-            ("mitre_layer_combined.json", "Detection Lab Coverage (Combined)", "Sigma OR Splunk coverage", "combined"),
+            ("mitre_layer_sigma.json", "ARM - Sigma Detection Coverage", "Sigma rule coverage", "sigma"),
+            ("mitre_layer_splunk.json", "ARM - Splunk Detection Coverage", "Splunk/ESCU rule coverage", "splunk"),
+            ("mitre_layer_combined.json", "ARM - Sigma + Splunk Detection Coverage", "Sigma OR Splunk coverage", "combined"),
         ]
 
         output_paths = []

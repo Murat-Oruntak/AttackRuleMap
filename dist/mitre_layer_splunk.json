@@ -1,5 +1,5 @@
 {
-    "name": "Detection Lab Coverage (Splunk)",
+    "name": "ARM - Splunk Detection Coverage",
     "versions": {
         "attack": "18",
         "navigator": "5.3.0",

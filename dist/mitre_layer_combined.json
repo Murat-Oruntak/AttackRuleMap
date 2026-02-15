@@ -1,5 +1,5 @@
 {
-    "name": "Detection Lab Coverage (Combined)",
+    "name": "ARM - Sigma + Splunk Detection Coverage",
     "versions": {
         "attack": "18",
         "navigator": "5.3.0",
