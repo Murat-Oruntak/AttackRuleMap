@@ -191,6 +191,8 @@ class ReportHandler:
             e["splunk_rules"] = escu_lite
             if "escu_rules" in e:
                 del e["escu_rules"]
+            if not sigma_lite and not escu_lite:
+                continue
             lite.append(e)
         return lite
 
