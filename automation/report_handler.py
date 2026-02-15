@@ -80,12 +80,12 @@ class ReportHandler:
             for tid, stats in sorted(technique_stats.items()):
                 total = stats["total"]
                 detected = stats[detected_key]
-                score = (detected / total * 100) if total > 0 else 0
+                score = int(round((detected / total * 100))) if total > 0 else 0
                 techniques.append({
                     "techniqueID": tid,
                     "score": score,
                     "color": "",
-                    "comment": f"Tests: {total} | Detected: {detected} | Coverage: %{score:.1f}",
+                    "comment": f"Tests: {total} | Detected: {detected} | Coverage: %{score}",
                     "enabled": True,
                     "metadata": []
                 })
@@ -326,11 +326,11 @@ class ReportHandler:
             1 for t in data
             if any(r.get("detected") for r in t.get("sigma_rules", []))
         )
-        coverage_pct = (detected_tests / total_tests * 100) if total_tests > 0 else 0.0
+        coverage_pct = int(round((detected_tests / total_tests * 100))) if total_tests > 0 else 0
 
         logging.info("Total Atomic Tests: %s", total_tests)
         logging.info("Tests Detected: %s", detected_tests)
-        logging.info("Coverage Rate: %.2f%%", coverage_pct)
+        logging.info("Coverage Rate: %s%%", coverage_pct)
 
 
 def generate_json_output(new_results, output_path):
