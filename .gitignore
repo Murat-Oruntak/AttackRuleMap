@@ -1,2 +1,16 @@
 generator
 .vscode
+# Python virtual environment
+venv/
+.venv
+# Local environment variables
+.env
+# Dependencies managed by the automation script
+dependencies/
+# Repos cloned by RepoManager (Sigma, ESCU, Atomic Red Team)
+data/repos/
+# Compiled files
+__pycache__/
+*.pyc
+# Logs
+*.log
