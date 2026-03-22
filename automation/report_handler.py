@@ -94,7 +94,7 @@ class ReportHandler:
                 "versions": {"attack": "18", "navigator": "5.3.0", "layer": "4.5"},
                 "domain": "enterprise-attack",
                 "description": description,
-                "filters": {"platforms": ["Windows"]},
+                "filters": {"platforms": [config.PLATFORM.capitalize()]},
                 "sorting": 3,
                 "layout": {
                     "layout": "side",
@@ -131,9 +131,9 @@ class ReportHandler:
                 logging.warning("Could not remove legacy mitre_layer.json: %s", e)
 
         layers_config = [
-            ("mitre_layer_sigma.json", "ARM - Sigma Detection Coverage", "Sigma rule coverage", "sigma"),
-            ("mitre_layer_splunk.json", "ARM - Splunk Detection Coverage", "Splunk/ESCU rule coverage", "splunk"),
-            ("mitre_layer_combined.json", "ARM - Sigma + Splunk Detection Coverage", "Sigma OR Splunk coverage", "combined"),
+            (f"mitre_layer_sigma_{config.PLATFORM}.json", "ARM - Sigma Detection Coverage", "Sigma rule coverage", "sigma"),
+            (f"mitre_layer_splunk_{config.PLATFORM}.json", "ARM - Splunk Detection Coverage", "Splunk/ESCU rule coverage", "splunk"),
+            (f"mitre_layer_combined_{config.PLATFORM}.json", "ARM - Sigma + Splunk Detection Coverage", "Sigma OR Splunk coverage", "combined"),
         ]
 
         output_paths = []

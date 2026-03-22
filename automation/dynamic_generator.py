@@ -45,6 +45,8 @@ CIM_MAPPING = {
     "ScriptBlockText=": "Message=",
     "ScriptBlockText IN": "Message IN",
     "field=ScriptBlockText": "field=Message",
+    # Linux (auditd)
+    "exe=": "process_exec=",
 }
 
 # GitHub raw URLs for rule links (master branch)
@@ -56,10 +58,13 @@ def _apply_cim_mapping(spl: str) -> str:
     """Apply CIM-compliant field name replacements for Sigma->Splunk compatibility."""
     if not spl or not isinstance(spl, str):
         return spl
+    if config.PLATFORM == "linux":
+        return spl
     result = spl
     for old, new in sorted(CIM_MAPPING.items(), key=lambda x: -len(x[0])):
         result = result.replace(old, new)
     return result
+
 
 
 def _normalize_sigma_spl_for_splunk(query: str) -> str:
@@ -141,6 +146,12 @@ class RuleMapper:
                 doc = utils.load_yaml_file(fp)
                 if not isinstance(doc, dict) or "detection" not in doc or "title" not in doc:
                     continue
+
+                if config.PLATFORM == "linux":
+                    product = doc.get("logsource", {}).get("product", "")
+                    if product != "linux":
+                        continue
+
                 tags = doc.get("tags") or []
                 if not isinstance(tags, list):
                     continue
@@ -209,7 +220,10 @@ class AttackEngine:
             logging.warning("VM not ready for %s", technique_id)
             return False, 0.0, 0.0
         start_time = time.time()
-        ok = execution_handler.run_invoke_atomic_test(technique_id, test_number)
+        if config.PLATFORM == "windows":
+            ok = execution_handler.run_invoke_atomic_test(technique_id, test_number)
+        else:
+            ok = execution_handler.run_bash_atomic_test(technique_id, test_number)
         if not ok:
             vm_handler.stop_vm()
             return False, start_time, time.time()
@@ -328,9 +342,9 @@ class DynamicDetectionLab:
 
         for technique_id in self.technique_ids:
             tid = technique_id.upper()
-            tests = atomic_parser.get_tests_for_technique(tid, platform_filter="windows")
+            tests = atomic_parser.get_tests_for_technique(tid, platform_filter=config.PLATFORM)
             if not tests:
-                logging.info("========== Technique %s (no Windows tests) ==========", tid)
+                logging.info(f"========== Technique {tid} (no {config.PLATFORM} tests) ==========")
                 continue
 
             sigma_spl_list, escu_spl_list = self.rule_mapper.collect_for_technique(tid)

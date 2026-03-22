@@ -5,6 +5,7 @@ import time
 import paramiko
 from automation import config
 from automation import dependency_handler
+from automation import atomic_handler
 from automation import vm_handler
 
 
@@ -13,24 +14,28 @@ class PowerShellExecutor:
         self.host = config.VM_HOST
         self.username = config.VM_USERNAME
         self.password = config.VM_PASSWORD
-        self.port = 22
+        self.port = config.VM_SSH_PORT
+        self.key_path = config.VM_SSH_KEY_PATH
         self.timeout = max(30, int(config.VM_COMMAND_TIMEOUT_SECONDS))
         self._client = None
 
     def connect(self):
-        if not self.host or not self.username or not self.password:
-            logging.error("VM_HOST, VM_USERNAME, VM_PASSWORD must be set in .env")
+        if not self.host or not self.username:
+            logging.error("VM_HOST and VM_USERNAME must be set in .env")
             return False
         try:
             self._client = paramiko.SSHClient()
             self._client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            self._client.connect(
-                hostname=self.host,
-                port=self.port,
-                username=self.username,
-                password=self.password,
-                timeout=30,
-            )
+            if self.key_path:
+             self._client.connect(
+                 hostname=self.host, port=self.port,
+                 username=self.username, key_filename=self.key_path,
+                 timeout=30, banner_timeout=30,)
+            else:
+             self._client.connect(
+                 hostname=self.host, port=self.port,
+                 username=self.username, password=self.password,
+                 timeout=30, banner_timeout=30,)
             return True
         except Exception as e:
             logging.error("PowerShellExecutor connect failed: %s", e)
@@ -109,6 +114,44 @@ def run_invoke_atomic_test(technique_id="T1059.001", test_number=1):
     executor.disconnect()
     return status == 0
 
+def run_bash_atomic_test(technique_id="T1059.004", test_number=1):
+    client = _create_ssh_client()
+    if not client:
+        return False
+    prep_commands = (
+        "sudo ntpdate -u pool.ntp.org 2>/dev/null || sudo timedatectl set-ntp true; "
+        "sudo systemctl restart SplunkForwarder 2>/dev/null; "
+        "echo \"VM Current Time: $(date)\"")
+    status, stdout, stderr = _exec_on_vm(client, prep_commands, "bash")
+    client.close()
+    
+    
+    test_data, technique_path = atomic_handler.find_atomic_for_technique(
+        technique_id, config.ATOMIC_ATOMICS_PATH
+    )
+    if not test_data or "atomic_tests" not in test_data:
+        logging.debug("[FAIL] No atomic test data found for %s", technique_id)
+        return False
+
+    atomic_tests = test_data["atomic_tests"]
+    if test_number < 1 or test_number > len(atomic_tests):
+        logging.debug("[FAIL] Test number %s out of range", test_number)
+        return False
+    atomic_test = atomic_tests[test_number - 1]
+
+    status, stdout, stderr = run_test_on_vm(atomic_test, technique_path)
+
+    logging.debug("[CMD] bash atomic test %s #%s", technique_id, test_number)
+    stdout = re.sub(r'\x1b\[[0-9;]*m', '', stdout) if stdout else stdout
+    logging.debug("[STDOUT] %s", stdout)
+    if stderr:
+        logging.debug("[STDERR] %s", stderr)
+    if status == 0:
+        logging.debug("[SUCCESS] Bash atomic test %s completed", technique_id)
+    else:
+        logging.debug("[FAIL] Bash atomic test exit code %s", status)
+    return True
+
 
 def run_simple_encoded_command():
     script = "Write-Host 'AttackRuleMap-Simulation'; Get-Date -Format 'yyyy-MM-dd HH:mm:ss'; whoami"
@@ -129,11 +172,15 @@ def run_simple_encoded_command():
 
 
 def run_first_attack_simulation():
-    if run_invoke_atomic_test("T1059.001", 1):
-        return True
-    logging.debug("[FALLBACK] Invoke-AtomicTest failed, running simple EncodedCommand...")
-    return run_simple_encoded_command()
-
+    if config.PLATFORM == "windows":  
+        if run_invoke_atomic_test("T1059.001", 1):
+            return True
+        logging.debug("[FALLBACK] Invoke-AtomicTest failed, running simple EncodedCommand...")
+        return run_simple_encoded_command()
+    else:
+        if run_bash_atomic_test("T1059.004", 1):
+            return True
+        return False
 
 def run_first_attack_workflow():
     logging.debug("Starting first attack simulation workflow...")
@@ -166,11 +213,19 @@ def _create_ssh_client():
     try:
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(
-            hostname=config.VM_HOST, port=22,
-            username=config.VM_USERNAME, password=config.VM_PASSWORD,
-            timeout=30
-        )
+        
+
+        if config.VM_SSH_KEY_PATH:
+            client.connect(
+                hostname=config.VM_HOST, port=config.VM_SSH_PORT,
+                username=config.VM_USERNAME, key_filename=config.VM_SSH_KEY_PATH,
+                timeout=30, banner_timeout=30,)
+        else:
+            client.connect(
+                hostname=config.VM_HOST, port=config.VM_SSH_PORT,
+                username=config.VM_USERNAME, password=config.VM_PASSWORD,
+                timeout=30, banner_timeout=30,)
+        
         return client
     except Exception as e:
         logging.error(f"Failed to create SSH client. Exception: {e}")
@@ -194,6 +249,7 @@ def _build_arg_value_map(atomic_test: dict, safe_dir: str) -> dict:
     - Replaces PathToAtomicsFolder references with files uploaded into safe_dir.
     - If value looks like a file path (.exe, .dll, .ps1, etc.), point it to safe_dir\filename
     """
+    sep = "\\" if config.PLATFORM == "windows" else "/"
     mapping = {}
     for arg_name, arg_details in (atomic_test.get('input_arguments') or {}).items():
         default_value = str(arg_details.get('default', ''))
@@ -202,10 +258,10 @@ def _build_arg_value_map(atomic_test: dict, safe_dir: str) -> dict:
             relative_path = default_value.split("PathToAtomicsFolder", 1)[1].strip('\\/')
             # This assumes the relative path is from the root of the atomic-red-team repo
             file_name = os.path.basename(relative_path.replace('\\', '/'))
-            rewritten_path = f"{safe_dir}\\{file_name}"
-        elif any(ext in default_value.lower() for ext in ['.exe', '.dll', '.dmp', '.ps1', '.bat', '.txt', '.csv', '.zip']):
+            rewritten_path = f"{safe_dir}{sep}{file_name}"
+        elif any(ext in default_value.lower() for ext in ['.exe', '.dll', '.dmp', '.ps1', '.bat', '.txt', '.csv', '.zip', '.sh', '.py', '.so']):
             file_name = os.path.basename(default_value.replace('\\', '/'))
-            rewritten_path = f"{safe_dir}\\{file_name}"
+            rewritten_path = f"{safe_dir}{sep}{file_name}"
         else:
             rewritten_path = default_value
 
@@ -223,7 +279,11 @@ def _apply_rewrites_to_command(cmd_text: str, arg_map: dict, safe_dir: str) -> s
         out = out.replace(ph, val)
     # Replace PathToAtomicsFolder tokens with C:\\Atomic-Tests first (canonical), then ensure any path-like
     # values referring to ExternalPayloads map to our safe_dir uploads as a fallback.
-    out = out.replace('PathToAtomicsFolder', 'C:\\Atomic-Tests')
+    if config.PLATFORM == "windows":
+        out = out.replace('PathToAtomicsFolder', 'C:\\Atomic-Tests')
+    else:
+        out = out.replace('PathToAtomicsFolder', '/tmp/atomic-tests')
+
     return out
 
 
@@ -237,6 +297,8 @@ def _normalize_command_for_executor(command_text: str, executor_name: str) -> st
         return '; '.join(lines)
     elif executor_name == 'cmd':
         return ' & '.join(lines)
+    elif executor_name in ('bash', 'sh'):
+        return '\n'.join(lines)
     return command_text
 
 
@@ -246,6 +308,12 @@ def _exec_on_vm(client, command_text: str, executor_name: str):
         full_command_to_run = f"powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"{command_text}\""
     elif executor_name == 'cmd':
         full_command_to_run = f"cmd /c \"{command_text}\""
+    elif executor_name in ('bash', 'sh'):
+        if config.PLATFORM == "windows":
+            full_command_to_run = f"{executor_name} -c \"{command_text}\""
+        else: 
+            full_command_to_run = f"sudo {executor_name} -c \"{command_text}\""
+
     else:
         return (1, "", f"Unsupported executor: {executor_name}")
 
@@ -297,21 +365,30 @@ def run_test_on_vm(atomic_test, test_technique_path):
     if not client:
         return (1, "", "Could not establish SSH connection.")
 
-    safe_dir = config.VM_SAFE_DIR or "C:\\Atomic-Tests"
+    if config.PLATFORM == "windows":
+        safe_dir = config.VM_SAFE_DIR or "C:\\Atomic-Tests"
+    else:
+        safe_dir = config.VM_SAFE_DIR or "/tmp/atomic-tests"
+
     
     # Ensure safe dir exists on remote
     try:
-        stdin, stdout, stderr = client.exec_command(f'powershell -Command "New-Item -Path \"{safe_dir}\" -ItemType Directory -Force | Out-Null"')
+        if config.PLATFORM == "windows":
+            stdin, stdout, stderr = client.exec_command(f'powershell -Command "New-Item -Path \"{safe_dir}\" -ItemType Directory -Force | Out-Null"')
+        else:
+            stdin, stdout, stderr = client.exec_command(f'mkdir -p {safe_dir}')
+
         stdout.channel.recv_exit_status()
     except Exception as e:
         logging.warning(f"    -> Could not ensure remote safe dir exists: {e}")
 
     # Seed C:\Atomic-Tests path as well (many atomics assume it)
-    try:
-        stdin, stdout, stderr = client.exec_command('powershell -Command "New-Item -Path \"C:\\Atomic-Tests\" -ItemType Directory -Force | Out-Null"')
-        stdout.channel.recv_exit_status()
-    except Exception as e:
-        logging.debug(f"    -> Could not create C:\\Atomic-Tests: {e}")
+    if config.PLATFORM == "windows":
+        try:
+            stdin, stdout, stderr = client.exec_command('powershell -Command "New-Item -Path \"C:\\Atomic-Tests\" -ItemType Directory -Force | Out-Null"')
+            stdout.channel.recv_exit_status()
+        except Exception as e:
+            logging.debug(f"    -> Could not create C:\\Atomic-Tests: {e}")
 
     # --- 1. Handle Dependencies ---
     # 1a) Resolve and stage locally (download URLs / ExternalPayloads)
@@ -321,10 +398,11 @@ def run_test_on_vm(atomic_test, test_technique_path):
         try:
             remote_filename = os.path.basename(lf.replace('\\', '/'))
             remote_path_safe = f"{safe_dir.replace('\\','/')}/{remote_filename}"
-            remote_path_atomic = f"C:/Atomic-Tests/{remote_filename}"
             _upload_file_sftp(client, lf, remote_path_safe)
-            # also copy into C:\Atomic-Tests for tests that reference that path
-            client.exec_command(f'powershell -Command "Copy-Item -Force \"{remote_path_safe}\" -Destination \"{remote_path_atomic}\""')
+            if config.PLATFORM == "windows":   
+                remote_path_atomic = f"C:/Atomic-Tests/{remote_filename}"
+                # also copy into C:\Atomic-Tests for tests that reference that path
+                client.exec_command(f'powershell -Command "Copy-Item -Force \"{remote_path_safe}\" -Destination \"{remote_path_atomic}\""')
         except Exception as e:
             logging.warning(f"    -> Failed to upload staged file '{lf}': {e}")
     if 'dependencies' in atomic_test and atomic_test['dependencies']:
@@ -350,6 +428,8 @@ def run_test_on_vm(atomic_test, test_technique_path):
     
     # --- 2. Run dependency prereq commands if defined ---
     dep_executor = atomic_test.get('dependency_executor_name', 'powershell')
+    if config.PLATFORM != "windows" and dep_executor in ('powershell', 'command_prompt'):
+        dep_executor = 'bash'
     arg_map = _build_arg_value_map(atomic_test, safe_dir)
     for dep in (atomic_test.get('dependencies') or []):
         prereq_cmd = dep.get('prereq_command')
