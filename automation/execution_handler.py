@@ -262,6 +262,10 @@ def _build_arg_value_map(atomic_test: dict, safe_dir: str) -> dict:
         elif any(ext in default_value.lower() for ext in ['.exe', '.dll', '.dmp', '.ps1', '.bat', '.txt', '.csv', '.zip', '.sh', '.py', '.so']):
             file_name = os.path.basename(default_value.replace('\\', '/'))
             rewritten_path = f"{safe_dir}{sep}{file_name}"
+        elif config.PLATFORM == "linux" and arg_name == "interface" and config.VM_INTERFACE:
+            # Atomic's default interface (eth0/ens33) often doesn't exist on the VM.
+            # If VM_INTERFACE is configured, use the real NIC name instead.
+            rewritten_path = config.VM_INTERFACE
         else:
             rewritten_path = default_value
 
@@ -304,6 +308,9 @@ def _normalize_command_for_executor(command_text: str, executor_name: str) -> st
 
 def _exec_on_vm(client, command_text: str, executor_name: str):
     """Execute the given command on VM using specified executor (powershell/cmd) with timeout."""
+    # Linux only: when True, the script is sent over the channel's stdin instead
+    # of being embedded in `-c "..."` (avoids inner-quote collision). See below.
+    feed_via_stdin = False
     if executor_name == 'powershell':
         full_command_to_run = f"powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"{command_text}\""
     elif executor_name == 'cmd':
@@ -311,8 +318,21 @@ def _exec_on_vm(client, command_text: str, executor_name: str):
     elif executor_name in ('bash', 'sh'):
         if config.PLATFORM == "windows":
             full_command_to_run = f"{executor_name} -c \"{command_text}\""
-        else: 
-            full_command_to_run = f"sudo {executor_name} -c \"{command_text}\""
+        else:
+            # Linux: wrapping the script in -c "..." breaks whenever the script
+            # itself contains double quotes (e.g. `if [ "$(uname)" = 'FreeBSD' ]`):
+            # the inner " closes the outer " early and the shell mis-parses the
+            # script (Syntax error: unexpected end of file). To stay safe we only
+            # change behaviour for scripts that contain a double quote: we run
+            # `sh -s` and feed the script via stdin, so there is no outer quoting
+            # to collide with. Quote-free scripts keep the original -c path, so
+            # the common case is byte-for-byte unchanged. Windows path untouched
+            # (I cannot test it, so I did not change it without confirmation).
+            if '"' in command_text:
+                full_command_to_run = f"sudo {executor_name} -s"
+                feed_via_stdin = True
+            else:
+                full_command_to_run = f"sudo {executor_name} -c \"{command_text}\""
 
     else:
         return (1, "", f"Unsupported executor: {executor_name}")
@@ -327,6 +347,13 @@ def _exec_on_vm(client, command_text: str, executor_name: str):
         chan = transport.open_session()
         chan.settimeout(timeout)
         chan.exec_command(full_command_to_run)
+
+        if feed_via_stdin:
+            # Push the script into `sh -s` over stdin, then close the write side
+            # so the shell sees EOF and starts executing. No outer quoting, so
+            # the script's own quotes can never collide.
+            chan.sendall(command_text + "\n")
+            chan.shutdown_write()
 
         stdout_chunks = []
         stderr_chunks = []
@@ -399,7 +426,7 @@ def run_test_on_vm(atomic_test, test_technique_path):
             remote_filename = os.path.basename(lf.replace('\\', '/'))
             remote_path_safe = f"{safe_dir.replace('\\','/')}/{remote_filename}"
             _upload_file_sftp(client, lf, remote_path_safe)
-            if config.PLATFORM == "windows":   
+            if config.PLATFORM == "windows":
                 remote_path_atomic = f"C:/Atomic-Tests/{remote_filename}"
                 # also copy into C:\Atomic-Tests for tests that reference that path
                 client.exec_command(f'powershell -Command "Copy-Item -Force \"{remote_path_safe}\" -Destination \"{remote_path_atomic}\""')

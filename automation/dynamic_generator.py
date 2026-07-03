@@ -45,13 +45,20 @@ CIM_MAPPING = {
     "ScriptBlockText=": "Message=",
     "ScriptBlockText IN": "Message IN",
     "field=ScriptBlockText": "field=Message",
-    # Linux (auditd)
-    "exe=": "process_exec=",
 }
 
-# GitHub raw URLs for rule links (master branch)
+# GitHub raw URLs for rule links.
 SIGMA_RAW_BASE = "https://raw.githubusercontent.com/SigmaHQ/sigma/master"
-ESCU_RAW_BASE = "https://raw.githubusercontent.com/splunk/security_content/master"
+# ESCU/security_content: the detections/ tree lives on the repo's DEFAULT `develop`
+# branch; `master` 404s for the whole detections/ tree (verified: develop -> HTTP 200,
+# master -> 404). Switched to `develop` for Linux only, the platform this PR covers and
+# can verify. The existing Windows path is left on `master` unchanged — the same fix
+# almost certainly applies to Windows too, but I did not change the existing Windows
+# behaviour without confirmation / a way to test it.
+if config.PLATFORM == "linux":
+    ESCU_RAW_BASE = "https://raw.githubusercontent.com/splunk/security_content/develop"
+else:
+    ESCU_RAW_BASE = "https://raw.githubusercontent.com/splunk/security_content/master"
 
 
 def _apply_cim_mapping(spl: str) -> str:
@@ -165,7 +172,7 @@ class RuleMapper:
                                 spl = _apply_cim_mapping(spl)
                                 spl = _normalize_sigma_spl_for_splunk(spl)
                                 rule_id = doc.get("id") or ""
-                                rel_path = os.path.relpath(fp, config.SIGMA_REPO_PATH)
+                                rel_path = os.path.relpath(fp, config.SIGMA_REPO_PATH).replace("\\", "/")
                                 rule_link = f"{SIGMA_RAW_BASE}/{rel_path}" if rel_path and not rel_path.startswith("..") else ""
                                 sigma_entries.append({
                                     "rule_name": title,
@@ -185,7 +192,17 @@ class RuleMapper:
                 if not search or not isinstance(search, str):
                     continue
                 tags = doc.get("tags") or {}
-                attack_ids = tags.get("mitre_attack_id") or []
+                # Splunk security_content moved mitre_attack_id from under `tags`
+                # to the top level of the YAML (commit db8c7c8, 2026-05-13), which
+                # silently broke ESCU technique matching against the current repo.
+                # I only enable the new top-level lookup for Linux here, since that
+                # is the platform this PR covers and the one I could test. The same
+                # break very likely affects Windows too, but I did not want to change
+                # the Windows path without confirmation / a way to verify it.
+                if config.PLATFORM == "linux":
+                    attack_ids = doc.get("mitre_attack_id") or tags.get("mitre_attack_id") or []
+                else:
+                    attack_ids = tags.get("mitre_attack_id") or []
                 if isinstance(attack_ids, (str, int)):
                     attack_ids = [str(attack_ids)]
                 if not isinstance(attack_ids, list):
@@ -195,7 +212,14 @@ class RuleMapper:
                     continue
                 title = doc.get("name") or doc.get("title") or os.path.basename(fp)
                 sanitized = self._sanitize_escu_spl(search)
-                rel_path = os.path.relpath(fp, config.ESCU_REPO_PATH)
+                if config.PLATFORM == "linux":
+                    # Pipeline runs on a Windows host, so os.path.relpath returns
+                    # backslashes; normalize to forward slashes so the GitHub raw URL
+                    # is valid (the Sigma side already does this at ~line 166). Linux
+                    # only, per the same "don't touch the Windows path" rationale above.
+                    rel_path = os.path.relpath(fp, config.ESCU_REPO_PATH).replace("\\", "/")
+                else:
+                    rel_path = os.path.relpath(fp, config.ESCU_REPO_PATH)
                 rule_link = f"{ESCU_RAW_BASE}/{rel_path}" if rel_path and not rel_path.startswith("..") else ""
                 file_path = rel_path if rel_path and not rel_path.startswith("..") else fp
                 escu_entries.append({
@@ -419,12 +443,22 @@ class DynamicDetectionLab:
                     sigma_results[i]["detected"] = detected
                     sigma_results[i]["log_count"] = count
 
+                # Many ESCU rules aggregate over time (e.g. `bucket _time span=15m`
+                # | stats ...), so they need a window wider than a single test's
+                # ~100s. On Linux we widen only latest_time (push forward, never into
+                # the past), so the test's own events still fall inside a full bucket
+                # without pulling in earlier tests. Each test runs on a freshly
+                # reverted VM, so this does not cross-contaminate.
+                if config.PLATFORM == "linux":
+                    escu_latest = end_time + config.ESCU_AGG_WINDOW_SECONDS
+                else:
+                    escu_latest = end_time
                 for i, r in enumerate(escu_spl_list):
                     detected, count = verification.run(
                         r["sanitized_spl"],
                         rule_name=r["rule_name"],
                         earliest_time=start_time,
-                        latest_time=end_time,
+                        latest_time=escu_latest,
                     )
                     escu_results[i]["detected"] = detected
                     escu_results[i]["log_count"] = count

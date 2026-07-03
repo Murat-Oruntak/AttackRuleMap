@@ -56,6 +56,10 @@ VM_PASSWORD = os.getenv("VM_PASSWORD")
 VM_SAFE_DIR = os.getenv("VM_SAFE_DIR")
 VM_SSH_PORT = int(os.getenv("VM_SSH_PORT", "22"))
 VM_SSH_KEY_PATH = os.getenv("VM_SSH_KEY_PATH")
+# Linux only: real network interface name of the VM (e.g. enp0s3). When set, it
+# overrides an Atomic test's default "interface" argument (often eth0/ens33),
+# which otherwise fails with "No such device" on a differently-named NIC.
+VM_INTERFACE = os.getenv("VM_INTERFACE")
 
 if PLATFORM =="windows":
     ATOMIC_MODULE_PATH = os.getenv("ATOMIC_MODULE_PATH", r"C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1")
@@ -81,6 +85,10 @@ SPLUNK_INDEX_WAIT_SECONDS = int(os.getenv("SPLUNK_INDEX_WAIT_SECONDS", "900"))
 SPLUNK_TIME_PAD_SECONDS = int(os.getenv("SPLUNK_TIME_PAD_SECONDS", "300"))
 # Post-test wait (seconds) before powering off VM to allow UF to forward events
 POST_EXEC_FORWARD_WAIT_SECONDS = int(os.getenv("POST_EXEC_FORWARD_WAIT_SECONDS", "100"))
+# Linux only: extra seconds added to the ESCU search window. Many ESCU rules
+# aggregate over time (e.g. `bucket _time span=15m`) and need a window wider than
+# a single test's ~100s. Default 900s (15m) to cover the common bucket span.
+ESCU_AGG_WINDOW_SECONDS = int(os.getenv("ESCU_AGG_WINDOW_SECONDS", "900"))
 
 # --- Per-test verification settings ---
 PER_TEST_VERIFICATION = _as_bool(os.getenv("PER_TEST_VERIFICATION"), False)
@@ -105,7 +113,12 @@ else:
 ATTACK_LIST = [t.strip().upper() for t in os.getenv("ATTACK_TIDS", ATTACK_TIDS_DEFAULT).split(",") if t.strip()]
 
 # --- Output paths ---
-# Main report: dist/ for AJAX loading by index.html
-REPORT_JSON_PATH = os.path.join(PROJECT_ROOT, "dist", f"attack_rule_map_{PLATFORM}.json")
+# Main report: dist/ for AJAX loading by index.html.
+# Only Linux gets a platform-suffixed file (separate artifact); Windows keeps the
+# original un-suffixed name that index.html loads, so its behaviour is unchanged.
+if PLATFORM == "linux":
+    REPORT_JSON_PATH = os.path.join(PROJECT_ROOT, "dist", "attack_rule_map_linux.json")
+else:
+    REPORT_JSON_PATH = os.path.join(PROJECT_ROOT, "dist", "attack_rule_map.json")
 # dist/ for MITRE layer and HTML (keeps root clean)
 DIST_PATH = os.path.join(PROJECT_ROOT, "dist")
