@@ -83,8 +83,11 @@ TARGET_SNAPSHOT = os.getenv("TARGET_SNAPSHOT")
 SPLUNK_INDEX_WAIT_SECONDS = int(os.getenv("SPLUNK_INDEX_WAIT_SECONDS", "900"))
 # Time padding around execution window when querying Splunk (seconds)
 SPLUNK_TIME_PAD_SECONDS = int(os.getenv("SPLUNK_TIME_PAD_SECONDS", "300"))
-# Post-test wait (seconds) before powering off VM to allow UF to forward events
-POST_EXEC_FORWARD_WAIT_SECONDS = int(os.getenv("POST_EXEC_FORWARD_WAIT_SECONDS", "100"))
+# Post-test wait (seconds) before powering off VM to allow UF to forward events.
+# Linux (auditd -> UF) needs longer; Windows keeps the original 30s default so its
+# run duration and search window are unchanged.
+_default_forward_wait = "100" if PLATFORM == "linux" else "30"
+POST_EXEC_FORWARD_WAIT_SECONDS = int(os.getenv("POST_EXEC_FORWARD_WAIT_SECONDS", _default_forward_wait))
 # Linux only: extra seconds added to the ESCU search window. Many ESCU rules
 # aggregate over time (e.g. `bucket _time span=15m`) and need a window wider than
 # a single test's ~100s. Default 900s (15m) to cover the common bucket span.

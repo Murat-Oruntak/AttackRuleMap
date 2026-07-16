@@ -150,7 +150,12 @@ def run_bash_atomic_test(technique_id="T1059.004", test_number=1):
         logging.debug("[SUCCESS] Bash atomic test %s completed", technique_id)
     else:
         logging.debug("[FAIL] Bash atomic test exit code %s", status)
-    return True
+    # Return the real exit status (like the Windows path) so the caller skips
+    # detection for a test that did not run cleanly. Note: a few tests exit
+    # non-zero yet still emit the execve telemetry a command-based rule matches
+    # (e.g. xclip/xwd erroring on a headless VM with no X11 display); those
+    # detections will no longer be counted, which is the correct, stricter behaviour.
+    return status == 0
 
 
 def run_simple_encoded_command():

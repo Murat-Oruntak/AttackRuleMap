@@ -89,9 +89,12 @@ class ReportHandler:
                     "enabled": True,
                     "metadata": []
                 })
+            # Linux is aligned to ATT&CK v19 (includes T1685); Navigator won't draw a
+            # technique newer than the layer's attack version. Windows stays on "18".
+            attack_version = "19" if config.PLATFORM == "linux" else "18"
             return {
                 "name": name,
-                "versions": {"attack": "18", "navigator": "5.3.0", "layer": "4.5"},
+                "versions": {"attack": attack_version, "navigator": "5.3.0", "layer": "4.5"},
                 "domain": "enterprise-attack",
                 "description": description,
                 "filters": {"platforms": [config.PLATFORM.capitalize()]},
@@ -306,10 +309,13 @@ class ReportHandler:
             json.dump(lite, f, separators=(",", ":"), ensure_ascii=False)
         logging.info("Report saved (smart merge, ultra-lite): %s", path)
 
-        # Write metadata.json in same directory (dist/) for dashboard "Last Updated"
+        # Write metadata for the dashboard "Last Updated". Only Linux gets a
+        # platform-suffixed file so it doesn't overwrite the Windows metadata.json
+        # the site reads (Windows behaviour stays unchanged).
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         metadata = {"last_updated": timestamp}
-        metadata_path = os.path.join(os.path.dirname(path), "metadata.json")
+        metadata_name = "metadata_linux.json" if config.PLATFORM == "linux" else "metadata.json"
+        metadata_path = os.path.join(os.path.dirname(path), metadata_name)
         with open(metadata_path, "w", encoding="utf-8") as f:
             json.dump(metadata, f, indent=2)
         logging.info("Metadata saved: %s", metadata_path)

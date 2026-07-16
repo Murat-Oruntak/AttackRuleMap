@@ -1,7 +1,7 @@
 {
     "name": "ARM - Sigma Detection Coverage",
     "versions": {
-        "attack": "18",
+        "attack": "19",
         "navigator": "5.3.0",
         "layer": "4.5"
     },
@@ -156,22 +156,6 @@
             "score": 100,
             "color": "",
             "comment": "Tests: 6 | Detected: 6 | Coverage: %100",
-            "enabled": true,
-            "metadata": []
-        },
-        {
-            "techniqueID": "T1113",
-            "score": 100,
-            "color": "",
-            "comment": "Tests: 1 | Detected: 1 | Coverage: %100",
-            "enabled": true,
-            "metadata": []
-        },
-        {
-            "techniqueID": "T1115",
-            "score": 0,
-            "color": "",
-            "comment": "Tests: 1 | Detected: 0 | Coverage: %0",
             "enabled": true,
             "metadata": []
         },

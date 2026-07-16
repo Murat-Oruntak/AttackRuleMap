@@ -195,14 +195,11 @@ class RuleMapper:
                 # Splunk security_content moved mitre_attack_id from under `tags`
                 # to the top level of the YAML (commit db8c7c8, 2026-05-13), which
                 # silently broke ESCU technique matching against the current repo.
-                # I only enable the new top-level lookup for Linux here, since that
-                # is the platform this PR covers and the one I could test. The same
-                # break very likely affects Windows too, but I did not want to change
-                # the Windows path without confirmation / a way to verify it.
-                if config.PLATFORM == "linux":
-                    attack_ids = doc.get("mitre_attack_id") or tags.get("mitre_attack_id") or []
-                else:
-                    attack_ids = tags.get("mitre_attack_id") or []
+                # The lookup reads the new top-level field first, then falls back to
+                # the old `tags` location, so it is correct for both schemas and every
+                # platform (confirmed with the maintainer). Enabled for Windows too,
+                # which the current schema otherwise leaves with zero ESCU matches.
+                attack_ids = doc.get("mitre_attack_id") or tags.get("mitre_attack_id") or []
                 if isinstance(attack_ids, (str, int)):
                     attack_ids = [str(attack_ids)]
                 if not isinstance(attack_ids, list):
